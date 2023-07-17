@@ -1,0 +1,318 @@
+cff-version: 1.2.0
+title: SciPy
+message: If you use this software, please cite it using the metadata from this file.
+type: software
+authors:
+  - name: SciPy contributors
+    website: https://scipy.org/about/
+doi: 10.5281/zenodo.595738
+repository-code: "https://github.com/scipy/scipy"
+url: "https://scipy.org/"
+license: BSD-3-Clause
+preferred-citation:
+  type: article
+  title: "SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python"
+  year: 2020
+  date-published: "2020-02-03"
+  journal: Nature Methods
+  volume: 17
+  start: 262
+  end: 271
+  doi: 10.1038/s41592-019-0686-2
+  authors:
+    - given-names: Pauli
+      family-names: Virtanen
+      affiliation: University of Jyväskylä
+      orcid: "https://orcid.org/0000-0001-9957-1257"
+    - given-names: Ralf
+      family-names: Gommers
+      affiliation: Quansight LLC
+      orcid: "https://orcid.org/0000-0002-0300-3333"
+    - given-names: Travis E.
+      family-names: Oliphant
+    - given-names: Matt
+      family-names: Haberland
+      affiliation: California Polytechnic State University; University of California Los Angeles
+      orcid: "https://orcid.org/0000-0003-4806-3601"
+    - given-names: Tyler
+      family-names: Reddy
+      affiliation: Los Alamos National Laboratory
+      orcid: "https://orcid.org/0000-0003-2364-6157"
+    - given-names: David
+      family-names: Cournapeau
+    - given-names: Evgeni
+      family-names: Burovski
+      affiliation: National Research University Higher School of Economics
+    - given-names: Pearu
+      family-names: Peterson
+      affiliation: Institute of Cybernetics at Tallinn Technical University
+    - given-names: Warren
+      family-names: Weckesser
+      affiliation: University of California Berkeley
+    - given-names: Jonathan
+      family-names: Bright
+    - given-names: Stéfan J.
+      name-particle: van der
+      family-names: Walt
+      affiliation: University of California Berkeley
+      orcid: "https://orcid.org/0000-0001-9276-1891"
+    - given-names: Matthew
+      family-names: Brett
+      affiliation: University of Birmingham
+    - given-names: Joshua
+      family-names: Wilson
+    - given-names: K. Jarrod
+      family-names: Millman
+      affiliation: University of California Berkeley
+      orcid: "https://orcid.org/0000-0002-5263-5070"
+    - given-names: Nikolay
+      family-names: Mayorov
+      affiliation: WayRay LLC, Skolkovo Innovation Center
+    - given-names: Andrew R. J.
+      family-names: Nelson
+      affiliation: Australian Nuclear Science and Technology Organisation
+      orcid: "https://orcid.org/0000-0002-4548-3558"
+    - given-names: Eric
+      family-names: Jones
+      affiliation: Enthought, Inc.
+    - given-names: Robert
+      family-names: Kern
+      affiliation: Enthought, Inc.
+    - given-names: Eric
+      family-names: Larson
+      affiliation: University of Washington
+    - given-names: C. J.
+      family-names: Carey
+      affiliation: University of Massachusetts Amherst
+    - given-names: İlhan
+      family-names: Polat
+    - given-names: Yu
+      family-names: Feng
+      affiliation: University of California Berkeley
+    - given-names: Eric W.
+      family-names: Moore
+      affiliation: Bruker Biospin Corp.
+    - given-names: Jake
+      family-names: VanderPlas
+      orcid: "https://orcid.org/0000-0002-9623-3401"
+    - given-names: Denis
+      family-names: Laxalde
+      orcid: "https://orcid.org/0000-0002-5540-4825"
+    - given-names: Josef
+      family-names: Perktold
+    - given-names: Robert
+      family-names: Cimrman
+      affiliation: University of West Bohemia
+    - given-names: Ian
+      family-names: Henriksen
+      affiliation: Anaconda Inc.; Brigham Young University; University of Texas at Austin
+    - given-names: E. A.
+      family-names: Quintero
+    - given-names: Charles R.
+      family-names: Harris
+      affiliation: Space Dynamics Laboratory
+    - given-names: Anne M.
+      family-names: Archibald
+      affiliation: Anton Pannekoek Institute
+    - given-names: Antônio H.
+      family-names: Ribeiro
+      affiliation: Universidade Federal de Minas Gerais
+      orcid: "https://orcid.org/0000-0003-3632-8529"
+    - given-names: Fabian
+      family-names: Pedregosa
+      affiliation: Google LLC
+    - given-names: Paul
+      name-particle: van
+      family-names: Mulbregt
+      affiliation: Google LLC
+      orcid: "https://orcid.org/0000-0002-2382-8308"
+    - given-names: Aditya
+      family-names: Vijaykumar
+      affiliation: Tata Institute of Fundamental Research; Birla Institute of Technology and Science
+    - given-names: Alessandro Pietro
+      family-names: Bardelli
+    - given-names: Alex
+      family-names: Rothberg
+    - given-names: Andreas
+      family-names: Hilboll
+      affiliation: Institute of Environmental Physics
+    - given-names: Andreas
+      family-names: Kloeckner
+      affiliation: University of Illinois at Urbana-Champaign
+    - given-names: Anthony
+      family-names: Scopatz
+      affiliation: Quansight LLC
+    - given-names: Antony
+      family-names: Lee
+      affiliation: Université de Bordeaux
+    - given-names: Ariel
+      family-names: Rokem
+      affiliation: University of Washington
+    - given-names: Nathan
+      family-names: Woods
+      affiliation: Los Alamos National Laboratory
+    - given-names: Chad
+      family-names: Fulton
+      affiliation: Federal Reserve Board of Governors
+    - given-names: Charles
+      family-names: Masson
+      affiliation: Datadog Inc.
+    - given-names: Clark
+      family-names: Fitzgerald
+      affiliation: University of California - Davis
+    - given-names: David A.
+      family-names: Nicholson
+      affiliation: Emory University
+    - given-names: David R.
+      family-names: Hagen
+      affiliation: Applied BioMath
+    - given-names: Dmitrii V.
+      family-names: Pasechnik
+      affiliation: University of Oxford
+    - given-names: Emanuele
+      family-names: Olivetti
+      affiliation: Bruno Kessler Foundation
+    - given-names: Eric
+      family-names: Martin
+    - given-names: Eric
+      family-names: Wieser
+      affiliation: University of Cambridge
+    - given-names: Fabrice
+      family-names: Silva
+      affiliation: Aix Marseille University
+    - given-names: Felix
+      family-names: Lenders
+      affiliation: Heidelberg University; ABB Corporate Research; Technische Universität Carolo-Wilhelmina zu Braunschweig
+    - given-names: Florian
+      family-names: Wilhelm
+    - given-names: Gavin A.
+      family-names: Price
+      affiliation: Lawrence Berkeley National Laboratory
+    - given-names: Ludwig
+      family-names: Ingold
+      affiliation: Institut für Physik
+    - given-names: Gregory E.
+      family-names: Allen
+      affiliation: University of Texas at Austin
+    - given-names: Gregory R.
+      family-names: Lee
+      affiliation: University of Cincinnati; Cincinnati Children's Hospital Medical Center
+    - given-names: Irvin
+      family-names: Probst
+      affiliation: ENSTA Bretagne
+    - given-names: Jörg P.
+      family-names: Dietrich
+      affiliation: Ludwig-Maximilians-Universität; Excellence Cluster Universe
+    - given-names: Jacob
+      family-names: Silterra
+    - given-names: James T
+      family-names: Webber
+      affiliation: Chan Zuckerberg Biohub
+    - given-names: Joel
+      family-names: Nothman
+      affiliation: University of Sydney
+    - given-names: Johannes
+      family-names: Buchner
+      affiliation: Pontificia Universidad Católica de Chile; Max Planck Institute for Extraterrestrial Physics
+    - given-names: Johannes
+      family-names: Kulick
+      affiliation: University of Stuttgart
+    - given-names: cius de Miranda
+      family-names: Cardoso
+      affiliation: Universidade Federal de Campina Grande
+    - given-names: Joscha
+      family-names: Reimer
+      affiliation: Kiel University
+    - given-names: Joseph
+      family-names: Harrington
+      affiliation: University of Central Florida
+    - given-names: Justin
+      family-names: Kuczynski
+      affiliation: University of Colorado
+    - given-names: Kevin
+      family-names: Tritz
+      affiliation: Johns Hopkins University
+    - given-names: Martin
+      family-names: Thoma
+    - given-names: Matthew
+      family-names: Newville
+      affiliation: University of Chicago
+    - given-names: Maximilian
+      family-names: Bolingbroke
+    - given-names: Michael
+      family-names: Tartre
+      affiliation: Two Sigma Investments
+    - given-names: Mikhail
+      family-names: Pak
+      affiliation: Technical University of Munich
+    - given-names: Nathaniel J.
+      family-names: Smith
+    - given-names: Nikolai
+      family-names: Nowaczyk
+    - given-names: Nikolay
+      family-names: Shebanov
+    - given-names: Oleksandr
+      family-names: Pavlyk
+      affiliation: Intel Corp.
+    - given-names: Per A.
+      family-names: Brodtkorb
+    - given-names: Perry
+      family-names: Lee
+    - given-names: Robert T.
+      family-names: McGibbon
+      affiliation: D. E. Shaw Research
+    - given-names: Roman
+      family-names: Feldbauer
+      affiliation: University of Vienna
+    - given-names: Sam
+      family-names: Lewis
+    - given-names: Sam
+      family-names: Tygier
+      affiliation: University of Manchester
+    - given-names: Scott
+      family-names: Sievert
+      affiliation: University of Wisconsin - Madison
+    - given-names: Sebastiano
+      family-names: Vigna
+      affiliation: Università degli Studi di Milano
+    - given-names: Stefan
+      family-names: Peterson
+    - given-names: Surhud
+      family-names: More
+      affiliation: Inter-University Centre for Astronomy and Astrophysics; Kavli Institute for the Physics and Mathematics of the Universe
+    - given-names: Tadeusz
+      family-names: Pudlik
+      affiliation: Waymo LLC
+    - given-names: Takuya
+      family-names: Oshima
+      affiliation: Niigata University
+    - given-names: Thomas J.
+      family-names: Pingel
+      affiliation: Virginia Polytechnic Institute and State University
+    - given-names: Thomas P.
+      family-names: Robitaille
+      affiliation: Aperio Software
+    - given-names: Thomas
+      family-names: Spura
+    - given-names: Thouis R.
+      family-names: Jones
+      affiliation: Broad Institute
+    - given-names: Tim
+      family-names: Cera
+    - given-names: Tim
+      family-names: Leslie
+    - given-names: Tiziano
+      family-names: Zito
+      affiliation: Humboldt University of Berlin
+    - given-names: Tom
+      family-names: Krauss
+      affiliation: Epiq Solutions
+    - given-names: Utkarsh
+      family-names: Upadhyay
+      affiliation: Max Planck Institute for Software Systems
+    - given-names: Yaroslav O.
+      family-names: Halchenko
+      affiliation: Dartmouth College
+    - given-names: Yoshiki
+      family-names: Vázquez-Baeza
+      affiliation: University of California San Diego
