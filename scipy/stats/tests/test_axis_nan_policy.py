@@ -13,6 +13,7 @@ import numpy as np
 from numpy.testing import assert_allclose, assert_equal, suppress_warnings
 from scipy import stats
 from scipy.stats._axis_nan_policy import _masked_arrays_2_sentinel_arrays
+from scipy._lib._util import AxisError
 
 
 def unpack_ttest_result(res):
@@ -61,7 +62,30 @@ axis_nan_policy_cases = [
     (_get_ttest_ci(stats.ttest_1samp), (0,), dict(), 1, 2, False, None),
     (_get_ttest_ci(stats.ttest_rel), tuple(), dict(), 2, 2, True, None),
     (_get_ttest_ci(stats.ttest_ind), tuple(), dict(), 2, 2, False, None),
-    (stats.mode, tuple(), dict(), 1, 2, True, lambda x: (x.mode, x.count))
+    (stats.mode, tuple(), dict(), 1, 2, True, lambda x: (x.mode, x.count)),
+    (stats.differential_entropy, tuple(), dict(), 1, 1, False, lambda x: (x,)),
+    (stats.variation, tuple(), dict(), 1, 1, False, lambda x: (x,)),
+    (stats.levene, tuple(), {}, 2, 2, False, None),
+    (stats.fligner, tuple(), {'center': 'trimmed', 'proportiontocut': 0.01},
+     2, 2, False, None),
+    (stats.ansari, tuple(), {}, 2, 2, False, None),
+    (stats.entropy, tuple(), dict(), 1, 1, False, lambda x: (x,)),
+    (stats.entropy, tuple(), dict(), 2, 1, True, lambda x: (x,)),
+    (stats.cramervonmises, ("norm",), dict(), 1, 2, False,
+     lambda res: (res.statistic, res.pvalue)),
+    (stats.cramervonmises_2samp, tuple(), dict(), 2, 2, False,
+     lambda res: (res.statistic, res.pvalue)),
+    (stats.epps_singleton_2samp, tuple(), dict(), 2, 2, False, None),
+    (stats.bartlett, tuple(), {}, 2, 2, False, None),
+    (stats.tmean, tuple(), {}, 1, 1, False, lambda x: (x,)),
+    (stats.tvar, tuple(), {}, 1, 1, False, lambda x: (x,)),
+    (stats.tmin, tuple(), {}, 1, 1, False, lambda x: (x,)),
+    (stats.tmax, tuple(), {}, 1, 1, False, lambda x: (x,)),
+    (stats.tstd, tuple(), {}, 1, 1, False, lambda x: (x,)),
+    (stats.tsem, tuple(), {}, 1, 1, False, lambda x: (x,)),
+    (stats.circmean, tuple(), dict(), 1, 1, False, lambda x: (x,)),
+    (stats.circvar, tuple(), dict(), 1, 1, False, lambda x: (x,)),
+    (stats.circstd, tuple(), dict(), 1, 1, False, lambda x: (x,)),
 ]
 
 # If the message is one of those expected, put nans in
@@ -81,7 +105,11 @@ too_small_messages = {"The input contains nan",  # for nan_policy="raise"
                       "zero-size array to reduction operation maximum",
                       "`x` and `y` must be of nonzero size.",
                       "The exact distribution of the Wilcoxon test",
-                      "Data input must not be empty"}
+                      "Data input must not be empty",
+                      "Window length (0) must be positive and less",
+                      "Window length (1) must be positive and less",
+                      "Window length (2) must be positive and less",
+                      "No array values within given limits"}
 
 # If the message is one of these, results of the function may be inaccurate,
 # but NaNs are not to be placed
@@ -91,6 +119,8 @@ inaccuracy_messages = {"Precision loss occurred in moment calculation",
 # For some functions, nan_policy='propagate' should not just return NaNs
 override_propagate_funcs = {stats.mode}
 
+# For some functions, empty arrays produce non-NaN results
+empty_special_case_funcs = {stats.entropy}
 
 def _mixed_data_generator(n_samples, n_repetitions, axis, rng,
                           paired=False):
@@ -121,7 +151,7 @@ def _mixed_data_generator(n_samples, n_repetitions, axis, rng,
 
         # For multi-sample tests, we want to test broadcasting and check
         # that nan policy works correctly for each nan pattern for each input.
-        # This takes care of both simultaneosly.
+        # This takes care of both simultaneously.
         new_shape = [n_repetitions] + [1]*n_samples + [n_obs]
         new_shape[1 + i] = 6
         x = x.reshape(new_shape)
@@ -179,6 +209,8 @@ def nan_policy_1d(hypotest, data1d, unpacker, *args, n_outputs=2,
     return unpacker(hypotest(*data1d, *args, _no_deco=_no_deco, **kwds))
 
 
+@pytest.mark.filterwarnings('ignore::RuntimeWarning')
+@pytest.mark.filterwarnings('ignore::UserWarning')
 @pytest.mark.parametrize(("hypotest", "args", "kwds", "n_samples", "n_outputs",
                           "paired", "unpacker"), axis_nan_policy_cases)
 @pytest.mark.parametrize(("nan_policy"), ("propagate", "omit", "raise"))
@@ -192,6 +224,8 @@ def test_axis_nan_policy_fast(hypotest, args, kwds, n_samples, n_outputs,
 
 
 @pytest.mark.slow
+@pytest.mark.filterwarnings('ignore::RuntimeWarning')
+@pytest.mark.filterwarnings('ignore::UserWarning')
 @pytest.mark.parametrize(("hypotest", "args", "kwds", "n_samples", "n_outputs",
                           "paired", "unpacker"), axis_nan_policy_cases)
 @pytest.mark.parametrize(("nan_policy"), ("propagate", "omit", "raise"))
@@ -325,6 +359,7 @@ def _axis_nan_policy_test(hypotest, args, kwds, n_samples, n_outputs, paired,
             assert_equal(res[1].dtype, pvalues.dtype)
 
 
+@pytest.mark.filterwarnings('ignore::RuntimeWarning')
 @pytest.mark.parametrize(("hypotest", "args", "kwds", "n_samples", "n_outputs",
                           "paired", "unpacker"), axis_nan_policy_cases)
 @pytest.mark.parametrize(("nan_policy"), ("propagate", "omit", "raise"))
@@ -663,6 +698,11 @@ def test_empty(hypotest, args, kwds, n_samples, n_outputs, paired, unpacker):
                     sup.filter(RuntimeWarning, "invalid value encountered")
                     expected = np.mean(concat, axis=axis) * np.nan
 
+                if hypotest in empty_special_case_funcs:
+                    empty_val = hypotest(*([[]]*len(samples)), *args, **kwds)
+                    mask = np.isnan(expected)
+                    expected[mask] = empty_val
+
                 res = hypotest(*samples, *args, axis=axis, **kwds)
                 res = unpacker(res)
 
@@ -671,13 +711,14 @@ def test_empty(hypotest, args, kwds, n_samples, n_outputs, paired, unpacker):
 
             except ValueError:
                 # confirm that the arrays truly are not broadcastable
-                assert not _check_arrays_broadcastable(samples, axis)
+                assert not _check_arrays_broadcastable(samples,
+                                                       None if paired else axis)
 
                 # confirm that _both_ `_broadcast_concatenate` and `hypotest`
                 # produce this information.
                 message = "Array shapes are incompatible for broadcasting."
                 with pytest.raises(ValueError, match=message):
-                    stats._stats_py._broadcast_concatenate(samples, axis)
+                    stats._stats_py._broadcast_concatenate(samples, axis, paired)
                 with pytest.raises(ValueError, match=message):
                     hypotest(*samples, *args, axis=axis, **kwds)
 
@@ -952,7 +993,7 @@ def test_axis_None_vs_tuple_with_broadcasting():
 @pytest.mark.parametrize(("axis"),
                          list(permutations(range(-3, 3), 2)) + [(-4, 1)])
 def test_other_axis_tuples(axis):
-    # Check that _axis_nan_policy_factory treates all `axis` tuples as expected
+    # Check that _axis_nan_policy_factory treats all `axis` tuples as expected
     rng = np.random.default_rng(0)
     shape_x = (4, 5, 6)
     shape_y = (1, 6)
@@ -966,13 +1007,13 @@ def test_other_axis_tuples(axis):
 
     if len(set(axis)) != len(axis):
         message = "`axis` must contain only distinct elements"
-        with pytest.raises(np.AxisError, match=re.escape(message)):
+        with pytest.raises(AxisError, match=re.escape(message)):
             stats.mannwhitneyu(x, y, axis=axis_original)
         return
 
     if axis[0] < 0 or axis[-1] > 2:
         message = "`axis` is out of bounds for array of dimension 3"
-        with pytest.raises(np.AxisError, match=re.escape(message)):
+        with pytest.raises(AxisError, match=re.escape(message)):
             stats.mannwhitneyu(x, y, axis=axis_original)
         return
 
@@ -1102,7 +1143,7 @@ def test_array_like_input(dtype):
     # Check that `_axis_nan_policy`-decorated functions work with custom
     # containers that are coercible to numeric arrays
 
-    class ArrLike():
+    class ArrLike:
         def __init__(self, x):
             self._x = x
 

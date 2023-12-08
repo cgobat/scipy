@@ -67,6 +67,12 @@ class TestUnivariateSpline:
         spl = UnivariateSpline(x, y, k=3)
         assert_almost_equal(spl.roots()[0], 1.050290639101332)
 
+    def test_roots_length(self): # for gh18335
+        x = np.linspace(0, 50 * np.pi, 1000)
+        y = np.cos(x)
+        spl = UnivariateSpline(x, y, s=0)
+        assert_equal(len(spl.roots()), 50)
+
     def test_derivatives(self):
         x = [1, 3, 5, 7, 9]
         y = [0, 4, 9, 12, 21]
@@ -325,10 +331,10 @@ class TestUnivariateSpline:
             LSQUnivariateSpline(x_values, y_values, t_values, w=w_values)
         assert "x, y, and w should have a same length" in str(info.value)
 
-        with assert_raises(ValueError) as info:
+        message = "Interior knots t must satisfy Schoenberg-Whitney conditions"
+        with assert_raises(ValueError, match=message) as info:
             bbox = (100, -100)
             LSQUnivariateSpline(x_values, y_values, t_values, bbox=bbox)
-        assert "Interior knots t must satisfy Schoenberg-Whitney conditions" in str(info.value)
 
         with assert_raises(ValueError) as info:
             bbox = (-1)
@@ -1162,7 +1168,8 @@ class TestRectSphereBivariateSpline:
                         rtol=1e-4, atol=1e-4)
         assert_allclose(lut(x, y, dphi=1), _numdiff_2d(lut, x, y, dy=1),
                         rtol=1e-4, atol=1e-4)
-        assert_allclose(lut(x, y, dtheta=1, dphi=1), _numdiff_2d(lut, x, y, dx=1, dy=1, eps=1e-6),
+        assert_allclose(lut(x, y, dtheta=1, dphi=1),
+                        _numdiff_2d(lut, x, y, dx=1, dy=1, eps=1e-6),
                         rtol=1e-3, atol=1e-3)
 
         assert_array_equal(lut(x, y, dtheta=1),
@@ -1199,7 +1206,8 @@ class TestRectSphereBivariateSpline:
                         _numdiff_2d(lambda x,y: lut(x,y,grid=False), x, y, dy=1),
                         rtol=1e-4, atol=1e-4)
         assert_allclose(lut(x, y, dtheta=1, dphi=1, grid=False),
-                        _numdiff_2d(lambda x,y: lut(x,y,grid=False), x, y, dx=1, dy=1, eps=1e-6),
+                        _numdiff_2d(lambda x,y: lut(x,y,grid=False),
+                                    x, y, dx=1, dy=1, eps=1e-6),
                         rtol=1e-3, atol=1e-3)
 
     def test_invalid_input_2(self):

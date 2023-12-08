@@ -21,10 +21,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  get_commit_message:
+    name: Get commit message
+    uses: ./.github/workflows/commit_message.yml
+
   test_meson:
     name: Meson build
-    # If using act to run CI locally the github object does not exist and the usual skipping should not be enforced
-    if: "github.repository == 'scipy/scipy' || github.repository == ''"
+    needs: get_commit_message
+    # If using act to run CI locally the github object does not exist and
+    # the usual skipping should not be enforced
+    if: >
+      needs.get_commit_message.outputs.message == 1
+      && (github.repository == 'scipy/scipy' || github.repository == '')
     runs-on: macos-latest
     strategy:
       matrix:
@@ -113,7 +121,7 @@ jobs:
         # https://conda-forge.org/docs/maintainer/knowledge_base.html#requiring-newer-macos-sdks
         export MACOSX_DEPLOYMENT_TARGET=10.9
         export MACOSX_SDK_VERSION=10.9
-        CC="ccache $CC" python dev.py build -j 2
+        CC="ccache $CC" python dev.py build
 
     - name: Test SciPy
       shell: bash -l {0}
@@ -121,7 +129,7 @@ jobs:
         conda activate scipy-dev
         export OMP_NUM_THREADS=2
         export SCIPY_USE_PROPACK=1
-        python dev.py -n test -j 2
+        python dev.py -n test -j2
 
     - name: Ccache statistics
       shell: bash -l {0}
